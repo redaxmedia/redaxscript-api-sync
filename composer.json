@@ -1,0 +1,27 @@
+{
+	"name": "redaxmedia/redaxscript-api-sync",
+	"description": "Ultra lightweight Content Management System",
+	"version": "3.0.0",
+	"homepage": "http://redaxscript.com",
+	"license": "GPL-3.0",
+	"require":
+	{
+		"php": ">5.4"
+	},
+	"require-dev":
+	{
+		"phpdocumentor/phpdocumentor": "2.9.0",
+		"redaxmedia/redaxscript": "dev-master"
+	},
+	"scripts":
+	{
+		"post-install-cmd":
+		[
+			"cd vendor/redaxmedia/redaxscript && composer install --no-dev"
+		],
+		"post-update-cmd":
+		[
+			"@post-install-cmd"
+		]
+	}
+}

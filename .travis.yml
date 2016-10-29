@@ -1,0 +1,23 @@
+language: php
+
+php:
+- 7.0
+
+before_install:
+- composer global require hirak/prestissimo
+
+install:
+- composer self-update
+- composer install
+
+script:
+- vendor/bin/phpdoc
+- php sync.php
+
+notifications:
+ email:
+ - team@redaxscript.com
+ irc:
+ - chat.freenode.net#redaxscript
+ webhooks:
+ - https://webhooks.gitter.im/e/ff9acda2e5faf42e3182

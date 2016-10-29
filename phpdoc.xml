@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<phpdoc>
+	<title>Redaxscript</title>
+
+	<!-- parser -->
+
+	<parser>
+		<target>build</target>
+	</parser>
+
+	<!-- transformer -->
+
+	<transformer>
+		<target>build</target>
+		<external-class-documentation>
+			<uri>api/{LOWERCASE_CLASS}</uri>
+		</external-class-documentation>
+	</transformer>
+
+	<!-- files -->
+
+	<files>
+		<directory>vendor/redaxmedia/redaxscript/includes</directory>
+	</files>
+
+	<!-- transformations -->
+
+	<transformations>
+		<template name="xml" />
+	</transformations>
+</phpdoc>
