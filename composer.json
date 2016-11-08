@@ -1,6 +1,6 @@
 {
 	"name": "redaxmedia/redaxscript-api-sync",
-	"description": "Ultra lightweight Content Management System",
+	"description": "Yet another cronjob for Redaxscript's website",
 	"version": "3.0.0",
 	"homepage": "http://redaxscript.com",
 	"license": "GPL-3.0",
