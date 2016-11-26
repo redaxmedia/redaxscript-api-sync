@@ -40,8 +40,8 @@ if (Db::getStatus() === 2)
 	$reader = new Reader();
 	$structureObject = $reader->loadXML('build/structure.xml')->getObject();
 	$author = 'api-sync';
-	$categoryId = 3000;
-	$articleId = 3000;
+	$categoryId = 2000;
+	$articleId = 2000;
 
 	/* delete */
 
