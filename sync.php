@@ -1,6 +1,8 @@
 <?php
 namespace Redaxscript;
 
+use Doc;
+
 error_reporting(E_ERROR || E_PARSE);
 
 /* autoload */
@@ -12,9 +14,11 @@ include_once('vendor/redaxmedia/redaxscript/includes/Autoloader.php');
 $autoloader = new Autoloader();
 $autoloader->init(
 [
+	'Doc' => 'includes',
 	'Redaxscript' => 'vendor/redaxmedia/redaxscript/includes',
 	'vendor/redaxmedia/redaxscript/libraries'
 ]);
+$DocParser = new Doc\Parser();
 
 /* get instance */
 
@@ -36,7 +40,6 @@ Db::init();
 if (Db::getStatus() === 2)
 {
 	$status = 0;
-	$aliasFilter = new Filter\Alias();
 	$reader = new Reader();
 	$structureObject = $reader->loadXML('build/structure.xml')->getObject();
 	$author = 'api-sync';
@@ -64,9 +67,9 @@ if (Db::getStatus() === 2)
 	{
 		if ($key === 'file')
 		{
-			$title = $value->attributes()->path;
-			$alias = $aliasFilter->sanitize($value->attributes()->path);
-			$content = $value->attributes()->path;
+			$title = $DocParser->getTitle($value);
+			$alias = $DocParser->getAlias($value);
+			$content = $DocParser->getContent($value);
 
 			/* create */
 
