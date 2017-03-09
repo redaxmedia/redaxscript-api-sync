@@ -8,8 +8,8 @@ use Redaxscript\Filter;
  *
  * @since 3.0.0
  *
- * @package Redaxscript
- * @category PhpDoc
+ * @package Doc
+ * @category Parser
  * @author Henry Ruhs
  */
 
@@ -58,8 +58,62 @@ class Parser
 
 	public function getContent($item = null)
 	{
+		return $this->_getHeader($item) . $this->_getProperty($item) . $this->_getMethod($item);
+	}
+
+	/**
+	 * get the header
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+
+	protected function _getHeader($item = null)
+	{
 		ob_start();
-		var_dump($item);
+		var_dump($item->class->name);
+		var_dump($item->class->extends);
+		var_dump($item->class->attributes());
+		var_dump($item->class->docblock);
+		return '<blockcode>' . ob_get_clean() . '</blockcode>';
+	}
+
+	/**
+	 * get the property
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+
+	protected function _getProperty($item = null)
+	{
+		ob_start();
+		var_dump($item->class->property);
+		return '<blockcode>' . ob_get_clean() . '</blockcode>';
+	}
+
+
+	/**
+	 * get the method
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+
+	protected function _getMethod($item = null)
+	{
+
+		ob_start();
+		var_dump($item->class->method);
 		return '<blockcode>' . ob_get_clean() . '</blockcode>';
 	}
 }
