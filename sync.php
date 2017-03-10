@@ -18,7 +18,9 @@ $autoloader->init(
 	'Redaxscript' => 'vendor/redaxmedia/redaxscript/includes',
 	'vendor/redaxmedia/redaxscript/libraries'
 ]);
-$DocParser = new Doc\Parser();
+$language = Language::getInstance();
+$language->init();
+$DocParser = new Doc\Parser($language);
 
 /* get instance */
 

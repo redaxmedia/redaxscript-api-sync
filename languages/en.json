@@ -1,0 +1,20 @@
+{
+	"class": "Class",
+	"description": "Description",
+	"package": "Package",
+	"category": "Category",
+	"author": "Author",
+	"inherited_from": "Inherited from",
+	"namespace": "Namespace",
+	"property": "Property",
+	"properties": "Properties",
+	"method": "Method",
+	"methods": "Methods",
+	"type": "Type",
+	"visibility": "Visibility",
+	"point": ".",
+	"comma": ",",
+	"colon": ":",
+	"question_mark": "?",
+	"exclamation_mark": "!"
+}
