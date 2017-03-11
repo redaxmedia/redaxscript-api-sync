@@ -197,7 +197,7 @@ class Parser
 
 		foreach ($item->class->property as $key => $value)
 		{
-			$propertyArray =
+			$bodyArray =
 			[
 				$value->name,
 				$value->docblock->tag->type,
@@ -208,9 +208,9 @@ class Parser
 
 			/* process value */
 
-			foreach ($propertyArray as $property)
+			foreach ($bodyArray as $text)
 			{
-				$trElement->append('<td>' . $property . '</td>');
+				$trElement->append('<td>' . $text . '</td>');
 			}
 			$tbodyElement->append($trElement);
 		}
@@ -293,7 +293,7 @@ class Parser
 
 		foreach ($item->class->method as $key => $value)
 		{
-			$methodyArray =
+			$bodyArray =
 			[
 				$value->name,
 				$value->attributes()->visibility,
@@ -303,9 +303,9 @@ class Parser
 
 			/* process value */
 
-			foreach ($methodyArray as $methody)
+			foreach ($bodyArray as $text)
 			{
-				$trElement->append('<td>' . $methody . '</td>');
+				$trElement->append('<td>' . $text . '</td>');
 			}
 			$tbodyElement->append($trElement);
 		}
