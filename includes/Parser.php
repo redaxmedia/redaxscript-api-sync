@@ -58,7 +58,7 @@ class Parser
 	public function getAlias($item = null)
 	{
 		$aliasFilter = new Filter\Alias();
-		return $aliasFilter->sanitize($item->attributes()->path);
+		return strtolower($aliasFilter->sanitize($item->attributes()->path));
 	}
 
 	/**
@@ -73,11 +73,12 @@ class Parser
 
 	public function getContent($item = null)
 	{
-		return $this->_getHeader($item) . $this->_getProperty($item) . $this->_getMethod($item);
+		$itemChildren = $item->class ? $item->class : $item->interface;
+		return $this->_renderHeader($itemChildren) . $this->_renderProperty($itemChildren) . $this->_renderMethod($itemChildren);
 	}
 
 	/**
-	 * get the header
+	 * render the header
 	 *
 	 * @since 3.0.0
 	 *
@@ -86,7 +87,7 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _getHeader($item = null)
+	protected function _renderHeader($item = null)
 	{
 		/* html elements */
 
@@ -96,7 +97,7 @@ class Parser
 			[
 				'class' => 'rs-title-content-sub'
 			])
-			->text($this->_language->get('class') . $this->_language->get('colon') . ' ' . $item->class->name);
+			->text($item->name);
 		$listElement = new Html\Element();
 		$listElement
 			->init('ul',
@@ -106,18 +107,18 @@ class Parser
 
 		/* collect item output */
 
-		if ($item->class->attributes()->namespace)
+		if ($item->attributes()->namespace)
 		{
-			$listElement->append('<li>' . $this->_language->get('namespace') . $this->_language->get('colon') . ' ' . $item->class->attributes()->namespace .'</li>');
+			$listElement->append('<li>' . $this->_language->get('namespace') . $this->_language->get('colon') . ' ' . $item->attributes()->namespace .'</li>');
 		}
-		if ($item->class->docblock->description)
+		if ($item->docblock->description)
 		{
-			$listElement->append('<li>' . $this->_language->get('description') . $this->_language->get('colon') . ' ' . $item->class->docblock->description .'</li>');
+			$listElement->append('<li>' . $this->_language->get('description') . $this->_language->get('colon') . ' ' . $item->docblock->description .'</li>');
 		}
 
 		/* process tag */
 
-		foreach ($item->class->docblock->tag as $key => $value)
+		foreach ($item->docblock->tag as $key => $value)
 		{
 			$name = $this->_language->get((string)$value->attributes()->name);
 			$description = $value->attributes()->description;
@@ -134,7 +135,7 @@ class Parser
 	}
 
 	/**
-	 * get the property
+	 * render the property
 	 *
 	 * @since 3.0.0
 	 *
@@ -143,7 +144,7 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _getProperty($item = null)
+	protected function _renderProperty($item = null)
 	{
 		/* html elements */
 
@@ -192,26 +193,42 @@ class Parser
 			);
 		$trElement = new Html\Element();
 		$trElement->init('tr');
+		$tdElement = new Html\Element();
+		$tdElement->init('td');
 
 		/* collect body output */
 
-		foreach ($item->class->property as $key => $value)
+		if ($item->property)
 		{
-			$bodyArray =
-			[
-				$value->name,
-				$value->docblock->tag->type,
-				$value->attributes()->visibility,
-				$value->docblock->description
-			];
-			$trElement->clear();
-
-			/* process value */
-
-			foreach ($bodyArray as $text)
+			foreach ($item->property as $key => $value)
 			{
-				$trElement->append('<td>' . $text . '</td>');
+				$bodyArray =
+				[
+					$value->name,
+					$value->docblock->tag->type,
+					$value->attributes()->visibility,
+					$value->docblock->description
+				];
+				$trElement->clear();
+
+				/* process body */
+
+				foreach ($bodyArray as $text)
+				{
+					$tdElement->clear()->text($text);
+					$trElement->append($tdElement);
+				}
+				$tbodyElement->append($trElement);
 			}
+		}
+		else
+		{
+			$trElement->append(
+				$tdElement
+					->clear()
+					->attr('colspan', 4)
+					->text($this->_language->get('property_no') . $this->_language->get('point'))
+			);
 			$tbodyElement->append($trElement);
 		}
 
@@ -232,7 +249,7 @@ class Parser
 	}
 
 	/**
-	 * get the method
+	 * render the method
 	 *
 	 * @since 3.0.0
 	 *
@@ -241,7 +258,7 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _getMethod($item = null)
+	protected function _renderMethod($item = null)
 	{
 		/* html elements */
 
@@ -288,25 +305,41 @@ class Parser
 			);
 		$trElement = new Html\Element();
 		$trElement->init('tr');
+		$tdElement = new Html\Element();
+		$tdElement->init('td');
 
 		/* collect body output */
 
-		foreach ($item->class->method as $key => $value)
+		if ($item->method)
 		{
-			$bodyArray =
-			[
-				$value->name,
-				$value->attributes()->visibility,
-				$value->docblock->description
-			];
-			$trElement->clear();
-
-			/* process value */
-
-			foreach ($bodyArray as $text)
+			foreach ($item->method as $key => $value)
 			{
-				$trElement->append('<td>' . $text . '</td>');
+				$bodyArray =
+				[
+					$value->name,
+					$value->attributes()->visibility,
+					$value->docblock->description
+				];
+				$trElement->clear();
+
+				/* process body */
+
+				foreach ($bodyArray as $text)
+				{
+					$tdElement->clear()->text($text);
+					$trElement->append($tdElement);
+				}
+				$tbodyElement->append($trElement);
 			}
+		}
+		else
+		{
+			$trElement->append(
+				$tdElement
+					->clear()
+					->attr('colspan', 3)
+					->text($this->_language->get('method_no') . $this->_language->get('point'))
+			);
 			$tbodyElement->append($trElement);
 		}
 

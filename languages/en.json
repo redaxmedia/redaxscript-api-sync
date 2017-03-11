@@ -1,5 +1,5 @@
 {
-	"class": "Class",
+	"name": "Name",
 	"description": "Description",
 	"package": "Package",
 	"category": "Category",
@@ -8,8 +8,10 @@
 	"namespace": "Namespace",
 	"property": "Property",
 	"properties": "Properties",
+	"property_no": "No property present",
 	"method": "Method",
 	"methods": "Methods",
+	"method_no": "No method present",
 	"type": "Type",
 	"visibility": "Visibility",
 	"point": ".",
