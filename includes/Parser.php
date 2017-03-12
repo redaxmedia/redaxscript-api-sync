@@ -18,6 +18,14 @@ use Redaxscript\Language;
 class Parser
 {
 	/**
+	 * instance of the language class
+	 *
+	 * @var object
+	 */
+
+	protected $_language;
+
+	/**
 	 * constructor of the class
 	 *
 	 * @since 3.0.0
@@ -31,7 +39,7 @@ class Parser
 	}
 
 	/**
-	 * get the title
+	 * get the namespace
 	 *
 	 * @since 3.0.0
 	 *
@@ -39,10 +47,43 @@ class Parser
 	 *
 	 * @return string
 	 */
-	
-	public function getTitle($item = null)
+
+	public function getNamespace($item = null)
 	{
-		return $item->attributes()->path;
+		$itemChildren = $item->class ? $item->class : $item->interface;
+		return $itemChildren->attributes()->namespace;
+	}
+
+	/**
+	 * get the namespace alias
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+
+	public function getNamespaceAlias($item = null)
+	{
+		$aliasFilter = new Filter\Alias();
+		return strtolower($aliasFilter->sanitize($this->getNamespace($item)));
+	}
+
+	/**
+	 * get the name
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+
+	public function getName($item = null)
+	{
+		$itemChildren = $item->class ? $item->class : $item->interface;
+		return $itemChildren->name;
 	}
 
 	/**
@@ -54,11 +95,11 @@ class Parser
 	 *
 	 * @return string
 	 */
-	
-	public function getAlias($item = null)
+
+	public function getNameAlias($item = null)
 	{
 		$aliasFilter = new Filter\Alias();
-		return strtolower($aliasFilter->sanitize($item->attributes()->path));
+		return strtolower($aliasFilter->sanitize($this->getName($item)));
 	}
 
 	/**
@@ -74,11 +115,11 @@ class Parser
 	public function getContent($item = null)
 	{
 		$itemChildren = $item->class ? $item->class : $item->interface;
-		return $this->_renderHeader($itemChildren) . $this->_renderProperty($itemChildren) . $this->_renderMethod($itemChildren);
+		return $this->_renderList($itemChildren) . $this->_renderProperty($itemChildren) . $this->_renderMethod($itemChildren);
 	}
 
 	/**
-	 * render the header
+	 * render the list
 	 *
 	 * @since 3.0.0
 	 *
@@ -87,17 +128,10 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _renderHeader($item = null)
+	protected function _renderList($item = null)
 	{
 		/* html elements */
 
-		$titleElement = new Html\Element();
-		$titleElement
-			->init('h3',
-			[
-				'class' => 'rs-title-content-sub'
-			])
-			->text($item->name);
 		$listElement = new Html\Element();
 		$listElement
 			->init('ul',
@@ -130,7 +164,7 @@ class Parser
 
 		/* collect output */
 
-		$output = $titleElement . $listElement;
+		$output = $listElement;
 		return $output;
 	}
 
@@ -168,33 +202,45 @@ class Parser
 				'class' => 'rs-table-default'
 			]);
 		$theadElement = new Html\Element();
-		$theadElement
-			->init('thead')
-			->html(
-				'<tr>' .
-					'<th>' . $this->_language->get('property') . '</th>' .
-					'<th>' . $this->_language->get('type') . '</th>' .
-					'<th>' . $this->_language->get('visibility') . '</th>' .
-					'<th>' . $this->_language->get('description') . '</th>' .
-				'</tr>'
-			);
+		$theadElement->init('thead');
 		$tbodyElement = new Html\Element();
 		$tbodyElement->init('tbody');
 		$tfootElement = new Html\Element();
-		$tfootElement
-			->init('tfoot')
-			->html(
-				'<tr>' .
-					'<td>' . $this->_language->get('property') . '</td>' .
-					'<th>' . $this->_language->get('type') . '</th>' .
-					'<td>' . $this->_language->get('visibility') . '</td>' .
-					'<td>' . $this->_language->get('description') . '</td>' .
-				'</tr>'
-			);
+		$tfootElement->init('tfoot');
+		$thElement = new Html\Element();
+		$thElement->init('th');
 		$trElement = new Html\Element();
 		$trElement->init('tr');
 		$tdElement = new Html\Element();
 		$tdElement->init('td');
+
+		/* collect thead output */
+
+		$theadElement
+			->html(
+				$trElement
+					->copy()
+					->html(
+						$thElement->copy()->text($this->_language->get('property')) .
+						$thElement->copy()->text($this->_language->get('type')) .
+						$thElement->copy()->text($this->_language->get('visibility')) .
+						$thElement->copy()->text($this->_language->get('description'))
+					)
+			);
+
+		/* collect tfoot output */
+
+		$tfootElement
+			->html(
+				$trElement
+					->copy()
+					->html(
+						$tdElement->copy()->text($this->_language->get('property')) .
+						$tdElement->copy()->text($this->_language->get('type')) .
+						$tdElement->copy()->text($this->_language->get('visibility')) .
+						$tdElement->copy()->text($this->_language->get('description'))
+					)
+			);
 
 		/* collect body output */
 
@@ -215,7 +261,9 @@ class Parser
 
 				foreach ($bodyArray as $text)
 				{
-					$tdElement->clear()->text($text);
+					$tdElement
+						->clear()
+						->text($text);
 					$trElement->append($tdElement);
 				}
 				$tbodyElement->append($trElement);
@@ -225,7 +273,6 @@ class Parser
 		{
 			$trElement->append(
 				$tdElement
-					->clear()
 					->attr('colspan', 4)
 					->text($this->_language->get('property_no') . $this->_language->get('point'))
 			);
@@ -235,11 +282,7 @@ class Parser
 		/* collect table output */
 
 		$wrapperElement->html(
-			$tableElement->html(
-				$theadElement .
-				$tbodyElement .
-				$tfootElement
-			)
+			$tableElement->html($theadElement .	$tbodyElement .	$tfootElement)
 		);
 
 		/* collect output */
@@ -282,31 +325,43 @@ class Parser
 				'class' => 'rs-table-default'
 			]);
 		$theadElement = new Html\Element();
-		$theadElement
-			->init('thead')
-			->html(
-				'<tr>' .
-					'<th>' . $this->_language->get('method') . '</th>' .
-					'<th>' . $this->_language->get('visibility') . '</th>' .
-					'<th>' . $this->_language->get('description') . '</th>' .
-				'</tr>'
-			);
+		$theadElement->init('thead');
 		$tbodyElement = new Html\Element();
 		$tbodyElement->init('tbody');
 		$tfootElement = new Html\Element();
-		$tfootElement
-			->init('tfoot')
-			->html(
-				'<tr>' .
-					'<td>' . $this->_language->get('method') . '</td>' .
-					'<td>' . $this->_language->get('visibility') . '</td>' .
-					'<td>' . $this->_language->get('description') . '</td>' .
-				'</tr>'
-			);
+		$tfootElement->init('tfoot');
+		$thElement = new Html\Element();
+		$thElement->init('th');
 		$trElement = new Html\Element();
 		$trElement->init('tr');
 		$tdElement = new Html\Element();
 		$tdElement->init('td');
+
+		/* collect thead output */
+
+		$theadElement
+			->html(
+				$trElement
+					->copy()
+					->html(
+						$thElement->copy()->text($this->_language->get('method')) .
+						$thElement->copy()->text($this->_language->get('visibility')) .
+						$thElement->copy()->text($this->_language->get('description'))
+					)
+			);
+
+		/* collect tfoot output */
+
+		$tfootElement
+			->html(
+				$trElement
+					->copy()
+					->html(
+						$tdElement->copy()->text($this->_language->get('method')) .
+						$tdElement->copy()->text($this->_language->get('visibility')) .
+						$tdElement->copy()->text($this->_language->get('description'))
+					)
+			);
 
 		/* collect body output */
 
@@ -326,7 +381,9 @@ class Parser
 
 				foreach ($bodyArray as $text)
 				{
-					$tdElement->clear()->text($text);
+					$tdElement
+						->clear()
+						->text($text);
 					$trElement->append($tdElement);
 				}
 				$tbodyElement->append($trElement);
@@ -336,7 +393,6 @@ class Parser
 		{
 			$trElement->append(
 				$tdElement
-					->clear()
 					->attr('colspan', 3)
 					->text($this->_language->get('method_no') . $this->_language->get('point'))
 			);
@@ -346,11 +402,7 @@ class Parser
 		/* collect table output */
 
 		$wrapperElement->html(
-			$tableElement->html(
-				$theadElement .
-				$tbodyElement .
-				$tfootElement
-			)
+			$tableElement->html($theadElement .	$tbodyElement .	$tfootElement)
 		);
 
 		/* collect output */

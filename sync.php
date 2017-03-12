@@ -20,7 +20,6 @@ $autoloader->init(
 ]);
 $language = Language::getInstance();
 $language->init();
-$DocParser = new Doc\Parser($language);
 
 /* get instance */
 
@@ -42,50 +41,91 @@ Db::init();
 if (Db::getStatus() === 2)
 {
 	$status = 0;
+	$DocParser = new Doc\Parser($language);
 	$reader = new Reader();
-	$structureObject = $reader->loadXML('build/structure.xml')->getObject();
+	$structureXML = $reader->loadXML('build/structure.xml')->getObject();
 	$author = 'api-sync';
-	$categoryId = 2000;
-	$articleId = 2000;
+	$categoryCounter = $parentId = 2000;
+	$articleCounter = 2000;
 
-	/* delete */
+	/* delete category and article */
 
-	Db::forTablePrefix('categories')->whereIdIs($categoryId)->deleteMany();
-	Db::forTablePrefix('articles')->where('category', $categoryId)->deleteMany();
+	Db::forTablePrefix('categories')->where('author', $author)->deleteMany();
+	Db::forTablePrefix('articles')->where('author', $author)->deleteMany();
+
+	/* create category */
+
 	Db::forTablePrefix('categories')
 		->create()
 		->set(
 		[
-			'id' => $categoryId,
+			'id' => $categoryCounter,
 			'title' => 'API',
 			'alias' => 'api',
 			'author' => $author
 		])
 		->save();
 
-	/* process directory */
+	/* create article */
 
-	foreach ($structureObject as $key => $value)
+	Db::forTablePrefix('articles')
+		->create()
+		->set(
+		[
+			'id' => $articleCounter,
+			'title' => 'API Introduction',
+			'alias' => 'api-introduction',
+			'author' => $author,
+			'text' => 'Welcome to Redaxscript\'s API.',
+			'rank' => $articleCounter,
+			'category' => $categoryCounter
+		])
+		->save();
+
+	/* process xml */
+
+	foreach ($structureXML as $key => $value)
 	{
 		if ($key === 'file')
 		{
-			$title = $DocParser->getTitle($value);
-			$alias = $DocParser->getAlias($value);
-			$content = $DocParser->getContent($value);
+			$categoryTitle = $DocParser->getNamespace($value);
+			$categoryAlias = $DocParser->getNamespaceAlias($value);
+			$categoryId = Db::forTablePrefix('categories')->where('alias', $categoryAlias)->findOne()->id;
+			$articleTitle = $DocParser->getName($value);
+			$articleAlias = $DocParser->getNameAlias($value);
+			$articleText = $DocParser->getContent($value);
 
-			/* create */
+			/* create category */
+
+			if (!$categoryId)
+			{
+				Db::forTablePrefix('categories')
+					->create()
+					->set(
+					[
+						'id' => ++$categoryCounter,
+						'title' => $categoryTitle,
+						'alias' => $categoryAlias,
+						'author' => $author,
+						'rank' => $categoryCounter,
+						'parent' => $parentId
+					])
+					->save();
+			}
+
+			/* create article */
 
 			$createStatus = Db::forTablePrefix('articles')
 				->create()
 				->set(
 				[
-					'id' => $articleId++,
-					'title' => $title,
-					'alias' => $alias,
+					'id' => ++$articleCounter,
+					'title' => $articleTitle,
+					'alias' => $articleAlias . '-' . $articleCounter,
 					'author' => $author,
-					'text' => $content,
-					'rank' => $articleId,
-					'category' => $categoryId
+					'text' => $articleText,
+					'rank' => $articleCounter,
+					'category' => $categoryId ? $categoryId : $categoryCounter
 				])
 				->save();
 
