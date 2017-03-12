@@ -41,7 +41,7 @@ Db::init();
 if (Db::getStatus() === 2)
 {
 	$status = 0;
-	$DocParser = new Doc\Parser($language);
+	$docParser = new Doc\Parser($language);
 	$reader = new Reader();
 	$structureXML = $reader->loadXML('build/structure.xml')->getObject();
 	$author = 'api-sync';
@@ -73,10 +73,10 @@ if (Db::getStatus() === 2)
 		->set(
 		[
 			'id' => $articleCounter,
-			'title' => 'API Introduction',
-			'alias' => 'api-introduction',
+			'title' => 'Introduction',
+			'alias' => 'introduction-' . $articleCounter,
 			'author' => $author,
-			'text' => 'Welcome to Redaxscript\'s API.',
+			'text' => $language->get('introduction_api'),
 			'rank' => $articleCounter,
 			'category' => $categoryCounter
 		])
@@ -88,12 +88,12 @@ if (Db::getStatus() === 2)
 	{
 		if ($key === 'file')
 		{
-			$categoryTitle = $DocParser->getNamespace($value);
-			$categoryAlias = $DocParser->getNamespaceAlias($value);
+			$categoryTitle = $docParser->getNamespace($value);
+			$categoryAlias = $docParser->getNamespaceAlias($value);
 			$categoryId = Db::forTablePrefix('categories')->where('alias', $categoryAlias)->findOne()->id;
-			$articleTitle = $DocParser->getName($value);
-			$articleAlias = $DocParser->getNameAlias($value);
-			$articleText = $DocParser->getContent($value);
+			$articleTitle = $docParser->getName($value);
+			$articleAlias = $docParser->getNameAlias($value);
+			$articleText = $docParser->getContent($value);
 
 			/* create category */
 
