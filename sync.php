@@ -18,8 +18,6 @@ $autoloader->init(
 	'Redaxscript' => 'vendor/redaxmedia/redaxscript/includes',
 	'vendor/redaxmedia/redaxscript/libraries'
 ]);
-$language = Language::getInstance();
-$language->init();
 
 /* get instance */
 
@@ -35,6 +33,11 @@ $config->parse($dbUrl);
 
 Db::construct($config);
 Db::init();
+
+/* language */
+
+$language = Language::getInstance();
+$language->init();
 
 /* sync api */
 
