@@ -149,7 +149,7 @@ if (Db::getStatus() === 2)
 
 	/* auto increment */
 
-	Db::rawInstance()->rawExecute('ALTER TABLE categories AUTO_INCREMENT = 3000');
-	Db::rawInstance()->rawExecute('ALTER TABLE articles AUTO_INCREMENT = 3000');
+	Db::rawInstance()->rawExecute('ALTER TABLE ' . $config->get('dbPrefix') . 'categories AUTO_INCREMENT = 3000');
+	Db::rawInstance()->rawExecute('ALTER TABLE ' . $config->get('dbPrefix') . 'articles AUTO_INCREMENT = 3000');
 }
 exit($status);
