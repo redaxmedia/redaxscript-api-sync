@@ -50,6 +50,11 @@ if (Db::getStatus() === 2)
 	$author = 'api-sync';
 	$categoryCounter = $parentId = 2000;
 	$articleCounter = 2000;
+	
+	/* html elements */
+	
+	$textElement = new Html\Element();
+	$textElement->init('p');
 
 	/* delete category and article */
 
@@ -79,7 +84,7 @@ if (Db::getStatus() === 2)
 			'title' => 'Introduction',
 			'alias' => 'introduction-' . $articleCounter,
 			'author' => $author,
-			'text' => $language->get('introduction_api'),
+			'text' => $textElement->text($language->get('introduction_api')),
 			'rank' => $articleCounter,
 			'category' => $categoryCounter
 		])
