@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+namespace Sync;
+
+use Redaxscript\Config;
+use Redaxscript\Language;
+
+/* bootstrap */
+
+include('includes' . DIRECTORY_SEPARATOR . 'bootstrap.php');
+
+/* core */
+
+$core = new Core(Language::getInstance(), Config::getInstance());
+$core->run();

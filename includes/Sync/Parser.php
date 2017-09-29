@@ -1,16 +1,17 @@
 <?php
-namespace Doc;
+namespace Sync;
 
 use Redaxscript\Html;
 use Redaxscript\Filter;
 use Redaxscript\Language;
+use SimpleXMLElement;
 
 /**
  * parent class to parse the documentation
  *
- * @since 3.0.0
+ * @since 4.0.0
  *
- * @package Doc
+ * @package Sync
  * @category Parser
  * @author Henry Ruhs
  */
@@ -28,7 +29,7 @@ class Parser
 	/**
 	 * constructor of the class
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
 	 * @param Language $language instance of the language class
 	 */
@@ -41,14 +42,14 @@ class Parser
 	/**
 	 * get the namespace
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
-	 * @param object $item
+	 * @param SimpleXMLElement $item
 	 *
 	 * @return string
 	 */
 
-	public function getNamespace($item = null)
+	public function getNamespace(SimpleXMLElement $item = null) : string
 	{
 		$itemChildren = $item->class ? $item->class : $item->interface;
 		return $itemChildren->attributes()->namespace;
@@ -57,14 +58,14 @@ class Parser
 	/**
 	 * get the namespace alias
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
-	 * @param object $item
+	 * @param SimpleXMLElement $item
 	 *
 	 * @return string
 	 */
 
-	public function getNamespaceAlias($item = null)
+	public function getNamespaceAlias(SimpleXMLElement $item = null) : string
 	{
 		$aliasFilter = new Filter\Alias();
 		return strtolower($aliasFilter->sanitize($this->getNamespace($item)));
@@ -73,14 +74,14 @@ class Parser
 	/**
 	 * get the name
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
-	 * @param object $item
+	 * @param SimpleXMLElement $item
 	 *
 	 * @return string
 	 */
 
-	public function getName($item = null)
+	public function getName(SimpleXMLElement $item = null) : string
 	{
 		$itemChildren = $item->class ? $item->class : $item->interface;
 		return $itemChildren->name;
@@ -89,14 +90,14 @@ class Parser
 	/**
 	 * get the alias
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
-	 * @param object $item
+	 * @param SimpleXMLElement $item
 	 *
 	 * @return string
 	 */
 
-	public function getNameAlias($item = null)
+	public function getNameAlias(SimpleXMLElement $item = null) : string
 	{
 		$aliasFilter = new Filter\Alias();
 		return strtolower($aliasFilter->sanitize($this->getName($item)));
@@ -105,14 +106,14 @@ class Parser
 	/**
 	 * get the content
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
-	 * @param object $item
+	 * @param SimpleXMLElement $item
 	 *
 	 * @return string
 	 */
 
-	public function getContent($item = null)
+	public function getContent(SimpleXMLElement $item = null) : string
 	{
 		$itemChildren = $item->class ? $item->class : $item->interface;
 		return $this->_renderList($itemChildren) . $this->_renderProperty($itemChildren) . $this->_renderMethod($itemChildren);
@@ -121,33 +122,38 @@ class Parser
 	/**
 	 * render the list
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
-	 * @param object $item
+	 * @param SimpleXMLElement $item
 	 *
 	 * @return string
 	 */
 
-	protected function _renderList($item = null)
+	protected function _renderList(SimpleXMLElement $item = null) : string
 	{
 		/* html elements */
 
 		$listElement = new Html\Element();
-		$listElement
-			->init('ul',
-			[
-				'class' => 'rs-list-default'
-			]);
+		$listElement->init('ul',
+		[
+			'class' => 'rs-list-default'
+		]);
+		$itemElement = new Html\Element();
+		$itemElement->init('li');
 
 		/* collect item output */
 
 		if ($item->attributes()->namespace)
 		{
-			$listElement->append('<li>' . $this->_language->get('namespace') . $this->_language->get('colon') . ' ' . $item->attributes()->namespace .'</li>');
+			$listElement->append(
+				$itemElement->text($this->_language->get('namespace') . $this->_language->get('colon') . ' ' . $item->attributes()->namespace)
+			);
 		}
 		if ($item->docblock->description)
 		{
-			$listElement->append('<li>' . $this->_language->get('description') . $this->_language->get('colon') . ' ' . $item->docblock->description .'</li>');
+			$listElement->append(
+				$itemElement->text($this->_language->get('description') . $this->_language->get('colon') . ' ' . $item->docblock->description)
+			);
 		}
 
 		/* process tag */
@@ -158,49 +164,44 @@ class Parser
 			$description = $value->attributes()->description;
 			if ($name && $description)
 			{
-				$listElement->append('<li>' . $name . $this->_language->get('colon') . ' ' . $description .'</li>');
+				$listElement->append(
+					$itemElement->text($name . $this->_language->get('colon') . ' ' . $description)
+				);
 			}
 		}
-
-		/* collect output */
-
-		$output = $listElement;
-		return $output;
+		return $listElement;
 	}
 
 	/**
 	 * render the property
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
-	 * @param object $item
+	 * @param SimpleXMLElement $item
 	 *
 	 * @return string
 	 */
 
-	protected function _renderProperty($item = null)
+	protected function _renderProperty(SimpleXMLElement $item = null) : string
 	{
 		/* html elements */
 
 		$titleElement = new Html\Element();
-		$titleElement
-			->init('h3',
-			[
-				'class' => 'rs-title-content-sub'
-			])
-			->text($this->_language->get('properties'));
+		$titleElement->init('h3',
+		[
+			'class' => 'rs-title-content-sub'
+		])
+		->text($this->_language->get('properties'));
 		$wrapperElement = new Html\Element();
-		$wrapperElement
-			->init('div',
-			[
-				'class' => 'rs-wrapper-table'
-			]);
+		$wrapperElement->init('div',
+		[
+			'class' => 'rs-wrapper-table'
+		]);
 		$tableElement = new Html\Element();
-		$tableElement
-			->init('table',
-			[
-				'class' => 'rs-table-default'
-			]);
+		$tableElement->init('table',
+		[
+			'class' => 'rs-table-default'
+		]);
 		$theadElement = new Html\Element();
 		$theadElement->init('thead');
 		$tbodyElement = new Html\Element();
@@ -248,25 +249,27 @@ class Parser
 		{
 			foreach ($item->property as $key => $value)
 			{
-				$bodyArray =
-				[
-					$value->name,
-					$value->docblock->tag->type,
-					$value->attributes()->visibility,
-					$value->docblock->description
-				];
-				$trElement->clear();
-
-				/* process body */
-
-				foreach ($bodyArray as $text)
+				if (strlen($value->name))
 				{
-					$tdElement
-						->clear()
-						->text($text);
-					$trElement->append($tdElement);
+					$bodyArray =
+					[
+						$value->name,
+						$value->docblock->tag->type,
+						$value->attributes()->visibility,
+						$value->docblock->description
+					];
+					$trElement->clear();
+
+					/* process body */
+
+					foreach ($bodyArray as $text)
+					{
+						$trElement->append(
+							$tdElement->clear()->text($text)
+						);
+					}
+					$tbodyElement->append($trElement);
 				}
-				$tbodyElement->append($trElement);
 			}
 		}
 		else
@@ -284,46 +287,39 @@ class Parser
 		$wrapperElement->html(
 			$tableElement->html($theadElement .	$tbodyElement .	$tfootElement)
 		);
-
-		/* collect output */
-
-		$output = $titleElement . $wrapperElement;
-		return $output;
+		return $titleElement . $wrapperElement;
 	}
 
 	/**
 	 * render the method
 	 *
-	 * @since 3.0.0
+	 * @since 4.0.0
 	 *
-	 * @param object $item
+	 * @param SimpleXMLElement $item
 	 *
 	 * @return string
 	 */
 
-	protected function _renderMethod($item = null)
+	protected function _renderMethod(SimpleXMLElement $item = null) : string
 	{
 		/* html elements */
 
 		$titleElement = new Html\Element();
-		$titleElement
-			->init('h3',
-			[
-				'class' => 'rs-title-content-sub'
-			])
-			->text($this->_language->get('methods'));
+		$titleElement->init('h3',
+		[
+			'class' => 'rs-title-content-sub'
+		])
+		->text($this->_language->get('methods'));
 		$wrapperElement = new Html\Element();
-		$wrapperElement
-			->init('div',
-			[
-				'class' => 'rs-wrapper-table'
-			]);
+		$wrapperElement->init('div',
+		[
+			'class' => 'rs-wrapper-table'
+		]);
 		$tableElement = new Html\Element();
-		$tableElement
-			->init('table',
-			[
-				'class' => 'rs-table-default'
-			]);
+		$tableElement->init('table',
+		[
+			'class' => 'rs-table-default'
+		]);
 		$theadElement = new Html\Element();
 		$theadElement->init('thead');
 		$tbodyElement = new Html\Element();
@@ -369,24 +365,26 @@ class Parser
 		{
 			foreach ($item->method as $key => $value)
 			{
-				$bodyArray =
-				[
-					$value->name,
-					$value->attributes()->visibility,
-					$value->docblock->description
-				];
-				$trElement->clear();
-
-				/* process body */
-
-				foreach ($bodyArray as $text)
+				if (strlen($value->name))
 				{
-					$tdElement
-						->clear()
-						->text($text);
-					$trElement->append($tdElement);
+					$bodyArray =
+					[
+						$value->name,
+						$value->attributes()->visibility,
+						$value->docblock->description
+					];
+					$trElement->clear();
+
+					/* process body */
+
+					foreach ($bodyArray as $text)
+					{
+						$trElement->append(
+							$tdElement->clear()->text($text)
+						);
+					}
+					$tbodyElement->append($trElement);
 				}
-				$tbodyElement->append($trElement);
 			}
 		}
 		else
@@ -404,10 +402,6 @@ class Parser
 		$wrapperElement->html(
 			$tableElement->html($theadElement .	$tbodyElement .	$tfootElement)
 		);
-
-		/* collect output */
-
-		$output = $titleElement . $wrapperElement;
-		return $output;
+		return $titleElement . $wrapperElement;
 	}
 }
