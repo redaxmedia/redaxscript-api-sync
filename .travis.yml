@@ -12,7 +12,7 @@ install:
 
 script:
 - vendor/bin/phpdoc --no-ansi
-- php sync.php
+- bin/sync
 
 notifications:
  email:

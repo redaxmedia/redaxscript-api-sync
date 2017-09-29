@@ -15,6 +15,7 @@
 	"type": "Type",
 	"visibility": "Visibility",
 	"introduction_api": "Welcome to the API of Redaxscript",
+	"database_failed": "Connection to database failed",
 	"point": ".",
 	"comma": ",",
 	"colon": ":",
