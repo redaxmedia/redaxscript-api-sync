@@ -133,14 +133,13 @@ class Parser
 	{
 		/* html elements */
 
+		$listElement = new Html\Element();
+		$listElement->init('ul',
+		[
+			'class' => 'rs-list-default'
+		]);
 		$itemElement = new Html\Element();
 		$itemElement->init('li');
-		$listElement = new Html\Element();
-		$listElement
-			->init('ul',
-			[
-				'class' => 'rs-list-default'
-			]);
 
 		/* collect item output */
 
@@ -188,24 +187,21 @@ class Parser
 		/* html elements */
 
 		$titleElement = new Html\Element();
-		$titleElement
-			->init('h3',
-			[
-				'class' => 'rs-title-content-sub'
-			])
-			->text($this->_language->get('properties'));
+		$titleElement->init('h3',
+		[
+			'class' => 'rs-title-content-sub'
+		])
+		->text($this->_language->get('properties'));
 		$wrapperElement = new Html\Element();
-		$wrapperElement
-			->init('div',
-			[
-				'class' => 'rs-wrapper-table'
-			]);
+		$wrapperElement->init('div',
+		[
+			'class' => 'rs-wrapper-table'
+		]);
 		$tableElement = new Html\Element();
-		$tableElement
-			->init('table',
-			[
-				'class' => 'rs-table-default'
-			]);
+		$tableElement->init('table',
+		[
+			'class' => 'rs-table-default'
+		]);
 		$theadElement = new Html\Element();
 		$theadElement->init('thead');
 		$tbodyElement = new Html\Element();
@@ -309,24 +305,21 @@ class Parser
 		/* html elements */
 
 		$titleElement = new Html\Element();
-		$titleElement
-			->init('h3',
-			[
-				'class' => 'rs-title-content-sub'
-			])
-			->text($this->_language->get('methods'));
+		$titleElement->init('h3',
+		[
+			'class' => 'rs-title-content-sub'
+		])
+		->text($this->_language->get('methods'));
 		$wrapperElement = new Html\Element();
-		$wrapperElement
-			->init('div',
-			[
-				'class' => 'rs-wrapper-table'
-			]);
+		$wrapperElement->init('div',
+		[
+			'class' => 'rs-wrapper-table'
+		]);
 		$tableElement = new Html\Element();
-		$tableElement
-			->init('table',
-			[
-				'class' => 'rs-table-default'
-			]);
+		$tableElement->init('table',
+		[
+			'class' => 'rs-table-default'
+		]);
 		$theadElement = new Html\Element();
 		$theadElement->init('thead');
 		$tbodyElement = new Html\Element();
