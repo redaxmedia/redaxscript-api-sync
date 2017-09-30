@@ -1,5 +1,10 @@
 <?php
-namespace Redaxscript;
+namespace Sync;
+
+use Redaxscript\Autoloader;
+use Redaxscript\Config;
+use Redaxscript\Db;
+use Redaxscript\Language;
 
 error_reporting(E_ERROR | E_PARSE);
 

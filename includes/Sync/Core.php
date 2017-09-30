@@ -71,13 +71,13 @@ class Core
 
 	protected function _process() : int
 	{
-		$status = 0;
 		$parser = new Parser($this->_language);
 		$reader = new Reader();
 		$structureXML = $reader->loadXML('build' . DIRECTORY_SEPARATOR . 'structure.xml')->getObject();
 		$author = 'api-sync';
 		$categoryCounter = $parentId = 2000;
 		$articleCounter = 2000;
+		$status = 0;
 
 		/* html elements */
 
@@ -149,7 +149,7 @@ class Core
 						->save();
 				}
 
-				/* create article */
+				/* else create article */
 
 				$createStatus = Db::forTablePrefix('articles')
 					->create()
@@ -182,8 +182,21 @@ class Core
 
 		/* auto increment */
 
-		Db::rawInstance()->rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'categories AUTO_INCREMENT = 3000');
-		Db::rawInstance()->rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'articles AUTO_INCREMENT = 3000');
+		$this->_setAutoIncrement(3000);
 		return $status;
+	}
+
+	/**
+	 * set the auto increment
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param int $increment
+	 */
+
+	protected function _setAutoIncrement(int $increment = 0)
+	{
+		Db::rawInstance()->rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'categories AUTO_INCREMENT = ' . $increment);
+		Db::rawInstance()->rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'articles AUTO_INCREMENT = ' . $increment);
 	}
 }
