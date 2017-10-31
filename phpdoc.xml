@@ -20,7 +20,7 @@
 	<!-- files -->
 
 	<files>
-		<directory>vendor/redaxmedia/redaxscript/includes</directory>
+		<directory>vendor/redaxscript/redaxscript/includes</directory>
 		<ignore>includes/bootstrap.php</ignore>
 
 		<!-- deprecated -->

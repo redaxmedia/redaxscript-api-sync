@@ -1,5 +1,5 @@
 {
-	"name": "redaxmedia/redaxscript-api-sync",
+	"name": "redaxscript/redaxscript-api-sync",
 	"description": "Yet another cronjob for Redaxscript's website",
 	"version": "4.0.0",
 	"homepage": "https://redaxscript.com",
@@ -11,13 +11,13 @@
 	"require-dev":
 	{
 		"phpdocumentor/phpdocumentor": "2.9.0",
-		"redaxmedia/redaxscript": "dev-master"
+		"redaxscript/redaxscript": "dev-master"
 	},
 	"scripts":
 	{
 		"post-install-cmd":
 		[
-			"cd vendor/redaxmedia/redaxscript && composer install"
+			"cd vendor/redaxscript/redaxscript && composer install"
 		],
 		"post-update-cmd":
 		[
