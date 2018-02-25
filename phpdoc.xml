@@ -31,10 +31,6 @@
 		<ignore>includes/admin_router.php</ignore>
 		<ignore>includes/comments.php</ignore>
 		<ignore>includes/contents.php</ignore>
-		<ignore>includes/navigation.php</ignore>
-		<ignore>includes/query.php</ignore>
-		<ignore>includes/router.php</ignore>
-		<ignore>includes/startup.php</ignore>
 	</files>
 
 	<!-- transformations -->
