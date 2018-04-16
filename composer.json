@@ -10,12 +10,11 @@
 	},
 	"require-dev":
 	{
-		"phpdocumentor/phpdocumentor": "3.0.0-alpha1",
+		"phpdocumentor/phpdocumentor": "dev-master",
 		"redaxmedia/php-coding-standard": "1.0.0",
 		"redaxscript/redaxscript": "dev-master",
 		"squizlabs/php_codesniffer": "3.2.3"
 	},
-	"minimum-stability": "dev",
 	"scripts":
 	{
 		"post-install-cmd":
