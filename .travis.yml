@@ -11,7 +11,8 @@ install:
 - composer install
 
 script:
-- vendor/bin/phpdoc --no-ansi
+- composer run lint
+- composer run build
 - bin/sync
 
 notifications:

@@ -6,12 +6,14 @@
 	"license": "GPL-3.0",
 	"require":
 	{
-		"php": "^7.0"
+		"php": "^7.1"
 	},
 	"require-dev":
 	{
 		"phpdocumentor/phpdocumentor": "2.9.0",
-		"redaxscript/redaxscript": "dev-master"
+		"redaxmedia/php-coding-standard": "1.0.0",
+		"redaxscript/redaxscript": "dev-master",
+		"squizlabs/php_codesniffer": "3.2.3"
 	},
 	"scripts":
 	{
@@ -22,6 +24,14 @@
 		"post-update-cmd":
 		[
 			"@post-install-cmd"
+		],
+		"lint":
+		[
+			"vendor/bin/phpcs includes"
+		],
+		"build":
+		[
+			"vendor/bin/phpdoc --no-ansi"
 		]
 	}
 }

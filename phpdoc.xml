@@ -22,15 +22,6 @@
 	<files>
 		<directory>vendor/redaxscript/redaxscript/includes</directory>
 		<ignore>includes/bootstrap.php</ignore>
-
-		<!-- deprecated -->
-
-		<ignore>includes/admin_admin.php</ignore>
-		<ignore>includes/admin_list.php</ignore>
-		<ignore>includes/admin_query.php</ignore>
-		<ignore>includes/admin_router.php</ignore>
-		<ignore>includes/comments.php</ignore>
-		<ignore>includes/contents.php</ignore>
 	</files>
 
 	<!-- transformations -->
