@@ -17,7 +17,7 @@ include_once('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATO
 $autoloader = new Autoloader();
 $autoloader->init(
 [
-	'Sync' => 'includes' . DIRECTORY_SEPARATOR . 'Sync',
+	'Sync' => 'includes',
 	'Redaxscript' => 'vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'includes',
 	'vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'libraries'
 ]);

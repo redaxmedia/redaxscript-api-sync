@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 namespace Sync;
 
 use Redaxscript\Config;
@@ -10,7 +9,7 @@ use Redaxscript\Language;
 
 include('includes' . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
-/* core */
+/* sync */
 
-$core = new Core(Language::getInstance(), Config::getInstance());
-$core->run();
+$sync = new Sync(Language::getInstance(), Config::getInstance());
+$sync->run();
