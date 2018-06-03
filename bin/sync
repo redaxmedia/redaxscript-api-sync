@@ -9,7 +9,7 @@ use Redaxscript\Language;
 
 include('includes' . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
-/* sync */
+/* core */
 
-$sync = new Sync(Language::getInstance(), Config::getInstance());
-$sync->run();
+$core = new Core(Language::getInstance(), Config::getInstance());
+$core->run();

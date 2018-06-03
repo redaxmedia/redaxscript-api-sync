@@ -17,7 +17,7 @@ use Redaxscript\Reader;
  * @author Henry Ruhs
  */
 
-class Sync
+class Core
 {
 	/**
 	 * instance of the language class

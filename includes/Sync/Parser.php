@@ -344,7 +344,7 @@ class Parser
 
 		if ($item->method)
 		{
-			foreach ($item->property as $key => $value)
+			foreach ($item->method as $key => $value)
 			{
 				if (strlen($value->name))
 				{
