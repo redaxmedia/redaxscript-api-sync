@@ -8,7 +8,7 @@ use Redaxscript\Language;
 use Redaxscript\Reader;
 
 /**
- * parent class for the core
+ * parent class to sync the documentation
  *
  * @since 4.0.0
  *
