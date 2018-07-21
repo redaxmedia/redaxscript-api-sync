@@ -46,10 +46,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	public function getNamespace(SimpleXMLElement $item = null) : string
+	public function getNamespace(SimpleXMLElement $item = null) : ?string
 	{
 		$itemChildren = $item->class ? $item->class : $item->interface;
 		return $itemChildren->attributes()->namespace;
@@ -62,10 +62,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	public function getNamespaceAlias(SimpleXMLElement $item = null) : string
+	public function getNamespaceAlias(SimpleXMLElement $item = null) : ?string
 	{
 		$aliasFilter = new Filter\Alias();
 		return strtolower($aliasFilter->sanitize($this->getNamespace($item)));
