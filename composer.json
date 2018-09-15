@@ -7,14 +7,14 @@
 	"minimum-stability": "dev",
 	"require":
 	{
-		"php": "^7.1"
+		"php": "^7.2"
 	},
 	"require-dev":
 	{
 		"phpdocumentor/phpdocumentor": "dev-master",
-		"redaxmedia/php-coding-standard": "1.0.0",
+		"redaxmedia/php-coding-standard": "1.2.0",
 		"redaxscript/redaxscript": "dev-master",
-		"squizlabs/php_codesniffer": "3.2.3"
+		"squizlabs/php_codesniffer": "3.3.1"
 	},
 	"scripts":
 	{
@@ -29,6 +29,10 @@
 		"lint":
 		[
 			"vendor/bin/phpcs includes"
+		],
+		"fix":
+		[
+			"vendor/bin/phpcbf includes"
 		],
 		"build":
 		[

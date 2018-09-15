@@ -1,8 +1,8 @@
 <?php
 namespace Sync;
 
-use Redaxscript\Html;
 use Redaxscript\Filter;
+use Redaxscript\Html;
 use Redaxscript\Language;
 use SimpleXMLElement;
 

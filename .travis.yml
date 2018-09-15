@@ -7,7 +7,6 @@ before_install:
 - composer global require hirak/prestissimo
 
 install:
-- composer self-update
 - composer install
 
 before_script:
