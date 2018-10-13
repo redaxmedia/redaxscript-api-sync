@@ -180,10 +180,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	protected function _renderProperty(SimpleXMLElement $item = null) : string
+	protected function _renderProperty(SimpleXMLElement $item = null) : ?string
 	{
 		$output = null;
 		$outputHead = null;
@@ -287,10 +287,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	protected function _renderMethod(SimpleXMLElement $item = null) : string
+	protected function _renderMethod(SimpleXMLElement $item = null) : ?string
 	{
 		$output = null;
 		$outputHead = null;

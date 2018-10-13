@@ -1,6 +1,7 @@
 <?php
 namespace Sync;
 
+use Redaxscript\Admin;
 use Redaxscript\Config;
 use Redaxscript\Dater;
 use Redaxscript\Db;
@@ -75,11 +76,14 @@ class Core
 		$dater = new Dater();
 		$dater->init();
 		$now = $dater->getDateTime()->getTimeStamp();
+		$categoryModel = new Admin\Model\Category();
+		$articleModel = new Admin\Model\Article();
 		$parser = new Parser($this->_language);
 		$reader = new Reader();
 		$structureXML = $reader->loadXML('build' . DIRECTORY_SEPARATOR . 'structure.xml')->getObject();
 		$author = 'api-sync';
-		$categoryCounter = $parentId = 2000;
+		$categoryCounter = 2000;
+		$parentId = 2000;
 		$articleCounter = 2000;
 		$status = 0;
 
@@ -88,41 +92,35 @@ class Core
 		$textElement = new Html\Element();
 		$textElement->init('p');
 
-		/* delete category and article */
+		/* delete first */
 
-		Db::forTablePrefix('categories')->where('author', $author)->deleteMany();
-		Db::forTablePrefix('articles')->where('author', $author)->deleteMany();
+		$categoryModel->query()->where('author', $author)->deleteMany();
+		$articleModel->query()->where('author', $author)->deleteMany();
 
 		/* create category */
 
-		Db::forTablePrefix('categories')
-			->create()
-			->set(
-			[
-				'id' => $categoryCounter,
-				'title' => 'API',
-				'alias' => 'api',
-				'author' => $author,
-				'date' => $now
-			])
-			->save();
+		$categoryModel->createByArray(
+		[
+			'id' => $categoryCounter,
+			'title' => 'API',
+			'alias' => 'api',
+			'author' => $author,
+			'date' => $now
+		]);
 
 		/* create article */
 
-		Db::forTablePrefix('articles')
-			->create()
-			->set(
-			[
-				'id' => $articleCounter,
-				'title' => 'Introduction',
-				'alias' => 'introduction-' . $articleCounter,
-				'author' => $author,
-				'text' => $textElement->text($this->_language->get('introduction_api') . $this->_language->get('point')),
-				'rank' => $articleCounter,
-				'category' => $categoryCounter,
-				'date' => $now
-			])
-			->save();
+		$articleModel->createByArray(
+		[
+			'id' => $articleCounter,
+			'title' => 'Introduction',
+			'alias' => 'introduction-' . $articleCounter,
+			'author' => $author,
+			'text' => $textElement->text($this->_language->get('introduction_api') . $this->_language->get('point')),
+			'rank' => $articleCounter,
+			'category' => $categoryCounter,
+			'date' => $now
+		]);
 
 		/* process xml */
 
@@ -132,7 +130,7 @@ class Core
 			{
 				$categoryTitle = $parser->getNamespace($value);
 				$categoryAlias = $parser->getNamespaceAlias($value);
-				$categoryId = Db::forTablePrefix('categories')->where('alias', $categoryAlias)->findOne()->id;
+				$categoryId = $categoryModel->getByAlias($categoryAlias)->id;
 				$articleTitle = $parser->getName($value);
 				$articleAlias = $parser->getNameAlias($value);
 				$articleText = $parser->getContent($value);
@@ -141,37 +139,31 @@ class Core
 
 				if (!$categoryId)
 				{
-					Db::forTablePrefix('categories')
-						->create()
-						->set(
-						[
-							'id' => ++$categoryCounter,
-							'title' => $categoryTitle,
-							'alias' => $categoryAlias,
-							'author' => $author,
-							'rank' => $categoryCounter,
-							'parent' => $parentId,
-							'date' => $now
-						])
-						->save();
+					$categoryModel->createByArray(
+					[
+						'id' => ++$categoryCounter,
+						'title' => $categoryTitle,
+						'alias' => $categoryAlias,
+						'author' => $author,
+						'rank' => $categoryCounter,
+						'parent' => $parentId,
+						'date' => $now
+					]);
 				}
 
 				/* else create article */
 
-				$createStatus = Db::forTablePrefix('articles')
-					->create()
-					->set(
-					[
-						'id' => ++$articleCounter,
-						'title' => $articleTitle,
-						'alias' => $articleAlias . '-' . $articleCounter,
-						'author' => $author,
-						'text' => $articleText,
-						'rank' => $articleCounter,
-						'category' => $categoryId ? $categoryId : $categoryCounter,
-						'date' => $now
-					])
-					->save();
+				$createStatus = $articleModel->createByArray(
+				[
+					'id' => ++$articleCounter,
+					'title' => $articleTitle,
+					'alias' => $articleAlias . '-' . $articleCounter,
+					'author' => $author,
+					'text' => $articleText,
+					'rank' => $articleCounter,
+					'category' => $categoryId ? $categoryId : $categoryCounter,
+					'date' => $now
+				]);
 
 				/* handle status */
 
