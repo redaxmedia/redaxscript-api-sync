@@ -2,6 +2,7 @@
 namespace Sync;
 
 use Redaxscript\Config;
+use Redaxscript\Dater;
 use Redaxscript\Db;
 use Redaxscript\Html;
 use Redaxscript\Language;
@@ -71,6 +72,9 @@ class Core
 
 	protected function _process() : int
 	{
+		$dater = new Dater();
+		$dater->init();
+		$now = $dater->getDateTime()->getTimeStamp();
 		$parser = new Parser($this->_language);
 		$reader = new Reader();
 		$structureXML = $reader->loadXML('build' . DIRECTORY_SEPARATOR . 'structure.xml')->getObject();
@@ -98,7 +102,8 @@ class Core
 				'id' => $categoryCounter,
 				'title' => 'API',
 				'alias' => 'api',
-				'author' => $author
+				'author' => $author,
+				'date' => $now
 			])
 			->save();
 
@@ -114,7 +119,8 @@ class Core
 				'author' => $author,
 				'text' => $textElement->text($this->_language->get('introduction_api') . $this->_language->get('point')),
 				'rank' => $articleCounter,
-				'category' => $categoryCounter
+				'category' => $categoryCounter,
+				'date' => $now
 			])
 			->save();
 
@@ -144,7 +150,8 @@ class Core
 							'alias' => $categoryAlias,
 							'author' => $author,
 							'rank' => $categoryCounter,
-							'parent' => $parentId
+							'parent' => $parentId,
+							'date' => $now
 						])
 						->save();
 				}
@@ -161,7 +168,8 @@ class Core
 						'author' => $author,
 						'text' => $articleText,
 						'rank' => $articleCounter,
-						'category' => $categoryId ? $categoryId : $categoryCounter
+						'category' => $categoryId ? $categoryId : $categoryCounter,
+						'date' => $now
 					])
 					->save();
 
