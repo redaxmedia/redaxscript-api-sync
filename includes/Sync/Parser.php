@@ -46,10 +46,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	public function getNamespace(SimpleXMLElement $item = null) : string
+	public function getNamespace(SimpleXMLElement $item = null) : ?string
 	{
 		$itemChildren = $item->class ? $item->class : $item->interface;
 		return $itemChildren->attributes()->namespace;
@@ -62,13 +62,13 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	public function getNamespaceAlias(SimpleXMLElement $item = null) : string
+	public function getNamespaceAlias(SimpleXMLElement $item = null) : ?string
 	{
 		$aliasFilter = new Filter\Alias();
-		return strtolower($aliasFilter->sanitize($this->getNamespace($item)));
+		return $aliasFilter->sanitize($this->getNamespace($item));
 	}
 
 	/**
@@ -78,10 +78,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	public function getName(SimpleXMLElement $item = null) : string
+	public function getName(SimpleXMLElement $item = null) : ?string
 	{
 		$itemChildren = $item->class ? $item->class : $item->interface;
 		return $itemChildren->name;
@@ -94,13 +94,13 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	public function getNameAlias(SimpleXMLElement $item = null) : string
+	public function getNameAlias(SimpleXMLElement $item = null) : ?string
 	{
 		$aliasFilter = new Filter\Alias();
-		return strtolower($aliasFilter->sanitize($this->getName($item)));
+		return $aliasFilter->sanitize($this->getName($item));
 	}
 
 	/**
@@ -110,10 +110,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 
-	public function getContent(SimpleXMLElement $item = null) : string
+	public function getContent(SimpleXMLElement $item = null) : ?string
 	{
 		$itemChildren = $item->class ? $item->class : $item->interface;
 		return $this->_renderList($itemChildren) . $this->_renderProperty($itemChildren) . $this->_renderMethod($itemChildren);
@@ -240,7 +240,7 @@ class Parser
 		{
 			foreach ($item->property as $key => $value)
 			{
-				if (strlen($value->name))
+				if ($value->name)
 				{
 					$outputBody .= $trElement
 						->copy()
@@ -346,7 +346,7 @@ class Parser
 		{
 			foreach ($item->method as $key => $value)
 			{
-				if (strlen($value->name))
+				if ($value->name)
 				{
 					$outputBody .= $trElement
 						->copy()
