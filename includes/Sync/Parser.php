@@ -46,12 +46,12 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string|null
+	 * @return string
 	 */
 
-	public function getNamespace(SimpleXMLElement $item = null) : ?string
+	public function getNamespace(SimpleXMLElement $item = null) : string
 	{
-		$itemChildren = $item->class ? $item->class : $item->interface;
+		$itemChildren = $item->class ? : $item->interface;
 		return $itemChildren->attributes()->namespace;
 	}
 
@@ -62,10 +62,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string|null
+	 * @return string
 	 */
 
-	public function getNamespaceAlias(SimpleXMLElement $item = null) : ?string
+	public function getNamespaceAlias(SimpleXMLElement $item = null) : string
 	{
 		$aliasFilter = new Filter\Alias();
 		return $aliasFilter->sanitize($this->getNamespace($item));
@@ -78,12 +78,12 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string|null
+	 * @return string
 	 */
 
-	public function getName(SimpleXMLElement $item = null) : ?string
+	public function getName(SimpleXMLElement $item = null) : string
 	{
-		$itemChildren = $item->class ? $item->class : $item->interface;
+		$itemChildren = $item->class ? : $item->interface;
 		return $itemChildren->name;
 	}
 
@@ -94,10 +94,10 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string|null
+	 * @return string
 	 */
 
-	public function getNameAlias(SimpleXMLElement $item = null) : ?string
+	public function getNameAlias(SimpleXMLElement $item = null) : string
 	{
 		$aliasFilter = new Filter\Alias();
 		return $aliasFilter->sanitize($this->getName($item));
@@ -110,12 +110,12 @@ class Parser
 	 *
 	 * @param SimpleXMLElement $item
 	 *
-	 * @return string|null
+	 * @return string
 	 */
 
-	public function getContent(SimpleXMLElement $item = null) : ?string
+	public function getContent(SimpleXMLElement $item = null) : string
 	{
-		$itemChildren = $item->class ? $item->class : $item->interface;
+		$itemChildren = $item->class ? : $item->interface;
 		return $this->_renderList($itemChildren) . $this->_renderProperty($itemChildren) . $this->_renderMethod($itemChildren);
 	}
 

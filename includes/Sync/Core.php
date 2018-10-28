@@ -75,7 +75,7 @@ class Core
 	{
 		$dater = new Dater();
 		$dater->init();
-		$now = $dater->getDateTime()->getTimeStamp();
+		$now = $dater->getDateTime()->getTimestamp();
 		$categoryModel = new Admin\Model\Category();
 		$articleModel = new Admin\Model\Article();
 		$parser = new Parser($this->_language);

@@ -21,6 +21,7 @@
 
 	<files>
 		<directory>vendor/redaxscript/redaxscript/includes</directory>
+		<directory>vendor/redaxscript/redaxscript/modules</directory>
 		<ignore>includes/bootstrap.php</ignore>
 	</files>
 
