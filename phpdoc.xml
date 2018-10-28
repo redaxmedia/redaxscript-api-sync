@@ -12,16 +12,12 @@
 
 	<transformer>
 		<target>build</target>
-		<external-class-documentation>
-			<uri>api/{LOWERCASE_CLASS}</uri>
-		</external-class-documentation>
 	</transformer>
 
 	<!-- files -->
 
 	<files>
 		<directory>vendor/redaxscript/redaxscript/includes</directory>
-		<directory>vendor/redaxscript/redaxscript/modules</directory>
 		<ignore>includes/bootstrap.php</ignore>
 	</files>
 

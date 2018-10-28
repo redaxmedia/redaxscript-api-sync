@@ -36,7 +36,7 @@
 		],
 		"build":
 		[
-			"vendor/bin/phpdoc && vendor/bin/phpdoc"
+			"vendor/bin/phpdoc"
 		]
 	}
 }

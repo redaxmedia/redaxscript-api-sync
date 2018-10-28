@@ -126,7 +126,7 @@ class Core
 
 		foreach ($structureXML as $key => $value)
 		{
-			if ($key === 'file')
+			if ($value->class || $value->interface)
 			{
 				$categoryTitle = $parser->getNamespace($value);
 				$categoryAlias = $parser->getNamespaceAlias($value);
