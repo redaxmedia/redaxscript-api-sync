@@ -2,7 +2,6 @@
 namespace Sync;
 
 use Redaxscript\Admin;
-use Redaxscript\Config;
 use Redaxscript\Dater;
 use Redaxscript\Db;
 use Redaxscript\Html;
@@ -30,26 +29,16 @@ class Core
 	protected $_language;
 
 	/**
-	 * instance of the config class
-	 *
-	 * @var Config
-	 */
-
-	protected $_config;
-
-	/**
 	 * constructor of the class
 	 *
 	 * @since 4.0.0
 	 *
 	 * @param Language $language instance of the language class
-	 * @param Config $config instance of the config class
 	 */
 
-	public function __construct(Language $language, Config $config)
+	public function __construct(Language $language)
 	{
 		$this->_language = $language;
-		$this->_config = $config;
 	}
 
 	/**
@@ -182,21 +171,8 @@ class Core
 
 		/* auto increment */
 
-		$this->_setAutoIncrement(3000);
+		Db::setAutoIncrement('categories', 3000);
+		Db::setAutoIncrement('articles', 3000);
 		return $status;
-	}
-
-	/**
-	 * set the auto increment
-	 *
-	 * @since 4.0.0
-	 *
-	 * @param int $increment
-	 */
-
-	protected function _setAutoIncrement(int $increment = 0)
-	{
-		Db::rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'categories AUTO_INCREMENT = ' . $increment);
-		Db::rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'articles AUTO_INCREMENT = ' . $increment);
 	}
 }
