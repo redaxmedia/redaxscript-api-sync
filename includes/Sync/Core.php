@@ -79,7 +79,9 @@ class Core
 		/* html elements */
 
 		$textElement = new Html\Element();
-		$textElement->init('p');
+		$textElement
+			->init('p')
+			->text($this->_language->get('introduction_api') . $this->_language->get('point'));
 
 		/* delete first */
 
@@ -94,6 +96,7 @@ class Core
 			'title' => 'API',
 			'alias' => 'api',
 			'author' => $author,
+			'rank' => $categoryCounter,
 			'date' => $now
 		]);
 
@@ -105,7 +108,7 @@ class Core
 			'title' => 'Introduction',
 			'alias' => 'introduction-' . $articleCounter,
 			'author' => $author,
-			'text' => $textElement->text($this->_language->get('introduction_api') . $this->_language->get('point')),
+			'text' => $textElement,
 			'rank' => $articleCounter,
 			'category' => $categoryCounter,
 			'date' => $now
@@ -150,7 +153,7 @@ class Core
 					'author' => $author,
 					'text' => $articleText,
 					'rank' => $articleCounter,
-					'category' => $categoryId ? $categoryId : $categoryCounter,
+					'category' => $categoryId ? : $categoryCounter,
 					'date' => $now
 				]);
 
