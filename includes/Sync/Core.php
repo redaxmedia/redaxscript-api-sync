@@ -69,7 +69,7 @@ class Core
 		$articleModel = new Admin\Model\Article();
 		$parser = new Parser($this->_language);
 		$reader = new Reader();
-		$structureXML = $reader->loadXML('build' . DIRECTORY_SEPARATOR . 'structure.xml')->getObject();
+		$structureObject = $reader->loadXML('build' . DIRECTORY_SEPARATOR . 'structure.xml')->getObject();
 		$author = 'api-sync';
 		$categoryCounter = 2000;
 		$parentId = 2000;
@@ -114,9 +114,9 @@ class Core
 			'date' => $now
 		]);
 
-		/* process xml */
+		/* process structure */
 
-		foreach ($structureXML as $key => $value)
+		foreach ($structureObject as $value)
 		{
 			if ($value->class || $value->interface)
 			{
