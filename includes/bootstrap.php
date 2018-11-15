@@ -5,6 +5,8 @@ use Redaxscript\Autoloader;
 use Redaxscript\Config;
 use Redaxscript\Db;
 use Redaxscript\Language;
+use function error_reporting;
+use function getenv;
 
 error_reporting(E_ERROR | E_PARSE);
 

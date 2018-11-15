@@ -5,6 +5,7 @@ use Redaxscript\Filter;
 use Redaxscript\Html;
 use Redaxscript\Language;
 use SimpleXMLElement;
+use function count;
 
 /**
  * parent class to parse the documentation

@@ -12,7 +12,7 @@
 	"require-dev":
 	{
 		"phpdocumentor/phpdocumentor": "dev-master",
-		"redaxmedia/php-coding-standard": "1.2.1",
+		"redaxmedia/php-coding-standard": "1.2.2",
 		"redaxscript/redaxscript": "dev-master",
 		"squizlabs/php_codesniffer": "3.3.1"
 	},
