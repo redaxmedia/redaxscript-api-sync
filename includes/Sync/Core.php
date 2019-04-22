@@ -47,7 +47,7 @@ class Core
 	 * @since 4.0.0
 	 */
 
-	public function run()
+	public function run() : void
 	{
 		Db::getStatus() === 2 ? exit($this->_process()) : exit($this->_language->get('database_failed') . PHP_EOL);
 	}
