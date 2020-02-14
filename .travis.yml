@@ -8,9 +8,6 @@ before_install:
 install:
 - composer install
 
-before_script:
-- phpenv config-rm xdebug.ini
-
 script:
 - composer run lint
 - composer run build
