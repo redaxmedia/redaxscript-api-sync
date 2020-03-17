@@ -85,7 +85,7 @@ class Parser
 	public function getName(SimpleXMLElement $item = null) : string
 	{
 		$itemChildren = $item->class ? : $item->interface;
-		return $itemChildren->name;
+		return ltrim($itemChildren->name, '\\');
 	}
 
 	/**
