@@ -164,7 +164,7 @@ class Parser
 		foreach ($item->docblock->tag as $key => $value)
 		{
 			$name = $this->_language->get((string)$value->attributes()->name);
-			$description = $value->attributes()->description;
+			$description = $value->attributes()->method_name ? : $value->attributes()->description;
 			if ($name && $description)
 			{
 				$listElement->append(
@@ -314,7 +314,7 @@ class Parser
 			[
 				'class' => 'rs-title-content-sub'
 			])
-			->text($this->_language->get('properties'));
+			->text($this->_language->get('methods'));
 		$wrapperElement = $element
 			->copy()
 			->init('div',
