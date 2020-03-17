@@ -6,6 +6,7 @@ use Redaxscript\Html;
 use Redaxscript\Language;
 use SimpleXMLElement;
 use function count;
+use function ltrim;
 
 /**
  * parent class to parse the documentation
@@ -53,7 +54,7 @@ class Parser
 	public function getNamespace(SimpleXMLElement $item = null) : string
 	{
 		$itemChildren = $item->class ? : $item->interface;
-		return $itemChildren->attributes()->namespace;
+		return ltrim($itemChildren->attributes()->namespace, '\\');
 	}
 
 	/**
@@ -85,7 +86,7 @@ class Parser
 	public function getName(SimpleXMLElement $item = null) : string
 	{
 		$itemChildren = $item->class ? : $item->interface;
-		return ltrim($itemChildren->name, '\\');
+		return $itemChildren->name;
 	}
 
 	/**
