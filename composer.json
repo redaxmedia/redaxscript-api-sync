@@ -20,7 +20,7 @@
 	{
 		"post-install-cmd":
 		[
-			"cd vendor/redaxscript/redaxscript && composer install"
+			"composer install --working-dir=vendor/redaxscript/redaxscript"
 		],
 		"post-update-cmd":
 		[
